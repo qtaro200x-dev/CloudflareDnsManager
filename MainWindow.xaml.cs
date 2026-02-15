@@ -3,7 +3,6 @@ using System.Windows.Controls;
 using CloudflareDnsManager.Models;
 using CloudflareDnsManager.ViewModels;
 
-
 namespace CloudflareDnsManager;
 
 public partial class MainWindow : Window
@@ -22,4 +21,3 @@ public partial class MainWindow : Window
         }
     }
 }
-

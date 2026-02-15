@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:CloudflareDnsManager"
         mc:Ignorable="d"
         Title="Cloudflare DNS Manager" Height="600" Width="900">
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -30,37 +31,53 @@
 
         <!-- 中央：DNS レコード一覧 -->
         <DataGrid Grid.Row="1"
-          ItemsSource="{Binding Records}"
-          AutoGenerateColumns="False"
-          CanUserAddRows="False"
-          CellEditEnding="DataGrid_CellEditEnding">
-
-    <!-- ★ここが追加：行の見た目を IsModified で変える★ -->
-    <DataGrid.RowStyle>
-        <Style TargetType="DataGridRow">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsModified}" Value="True">
-                    <Setter Property="Foreground" Value="Red"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </DataGrid.RowStyle>
-
-    <DataGrid.Columns>
-        <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
-        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-        <DataGridTextColumn Header="Content" Binding="{Binding Content}"/>
-        <DataGridTextColumn Header="TTL" Binding="{Binding Ttl}"/>
-        <DataGridCheckBoxColumn Header="Proxied" Binding="{Binding Proxied}"/>
-    </DataGrid.Columns>
-</DataGrid>
+            ItemsSource="{Binding Records}"
+            SelectedItem="{Binding SelectedRecord}"
+            AutoGenerateColumns="False"
+            CanUserAddRows="False"
+            CellEditEnding="DataGrid_CellEditEnding">
 
 
-        <!-- 下部：反映ボタン -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button Content="反映"
-                    Width="80"
-                    Command="{Binding ApplyCommand}"/>
-        </StackPanel>
+            <!-- 行の色を IsModified で変える -->
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsModified}" Value="True">
+                            <Setter Property="Foreground" Value="Red"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Priority"
+                    Binding="{Binding Priority}"
+                    IsReadOnly="False"/>
+                <DataGridTextColumn Header="Content" Binding="{Binding Content}"/>
+                <DataGridTextColumn Header="TTL" Binding="{Binding Ttl}"/>
+                <DataGridCheckBoxColumn Header="Proxied" Binding="{Binding Proxied}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- 下部：追加・削除・反映ボタン -->
+    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+
+    <Button Content="追加"
+            Width="80"
+            Margin="0,0,10,0"
+            Command="{Binding AddCommand}"/>
+
+    <Button Content="削除"
+            Width="80"
+            Margin="0,0,10,0"
+            Command="{Binding DeleteCommand}"/>
+
+    <Button Content="反映"
+            Width="80"
+            Command="{Binding ApplyCommand}"/>
+    </StackPanel>
+
     </Grid>
 </Window>
