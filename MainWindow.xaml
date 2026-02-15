@@ -1,0 +1,66 @@
+﻿<Window x:Class="CloudflareDnsManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CloudflareDnsManager"
+        mc:Ignorable="d"
+        Title="Cloudflare DNS Manager" Height="600" Width="900">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 上部：API Token / Zone ID / 読み込みボタン -->
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="API Token:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+            <TextBox Width="250" Margin="0,0,10,0"
+                     Text="{Binding ApiToken, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Text="Zone ID:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+            <TextBox Width="250" Margin="0,0,10,0"
+                     Text="{Binding ZoneId, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button Content="読み込み"
+                    Width="80"
+                    Command="{Binding LoadCommand}"/>
+        </StackPanel>
+
+        <!-- 中央：DNS レコード一覧 -->
+        <DataGrid Grid.Row="1"
+          ItemsSource="{Binding Records}"
+          AutoGenerateColumns="False"
+          CanUserAddRows="False"
+          CellEditEnding="DataGrid_CellEditEnding">
+
+    <!-- ★ここが追加：行の見た目を IsModified で変える★ -->
+    <DataGrid.RowStyle>
+        <Style TargetType="DataGridRow">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsModified}" Value="True">
+                    <Setter Property="Foreground" Value="Red"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </DataGrid.RowStyle>
+
+    <DataGrid.Columns>
+        <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+        <DataGridTextColumn Header="Content" Binding="{Binding Content}"/>
+        <DataGridTextColumn Header="TTL" Binding="{Binding Ttl}"/>
+        <DataGridCheckBoxColumn Header="Proxied" Binding="{Binding Proxied}"/>
+    </DataGrid.Columns>
+</DataGrid>
+
+
+        <!-- 下部：反映ボタン -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="反映"
+                    Width="80"
+                    Command="{Binding ApplyCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>
